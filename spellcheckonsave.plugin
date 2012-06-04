@@ -1,0 +1,9 @@
+[Plugin]
+Loader=python
+Module=spellcheckonsave
+IAge=3
+Name=Spellcheck on Save
+Description=Performs a spellcheck on *.md,*.txt files whenever one is saved.
+Authors=Jonathan Butcher <footley@gmail.com>
+Copyright=Copyright © 2012 Jonathan Butcher <footley@gmail.com>
+Website=https://github.com/footley/gedit-spellcheck-on-save-plugin

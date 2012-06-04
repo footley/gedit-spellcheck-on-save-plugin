@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="gedit.plugins.spellcheckonsave.py" path="/gedit/plugins/spellcheckonsave/">
+  
+    <key type="s" name="extensions">
+      <default>".md;.txt"</default>
+      <summary>Semi-colon delimited list of extensions.</summary>
+      <description>The file extensions which should be spellchecked on save.</description>
+    </key>
+    
+    <key type="s" name="dictionary">
+      <default>"en_US"</default>
+      <summary>A valid culture string matching a dictionary present on your system.</summary>
+      <description>The dictionary to be used when performing the spellcheck.</description>
+    </key>
+    
+    <key type="s" name="wordregex">
+      <default>"[a-zA-Z]+[a-zA-Z']*"</default>
+      <summary>A Valid Regex.</summary>
+      <description>The regex used to determine a valid word to be spell checked.</description>
+    </key>
+    
+  </schema>
+</schemalist>
