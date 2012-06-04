@@ -1,7 +1,9 @@
 Gedit Spell check on Save
 =========================
 
-A gedit plug in which and performs a spellcheck on *.txt and *.md (configurable) files whenever one is saved.
+A Gedit plug in which and performs a spell-check on *.txt and *.md (configurable) files whenever one is saved.
+
+Right-click on misspelled words and use Suggestions sub-menu to change.
 
 Installation
 ------------
@@ -17,6 +19,4 @@ Either run the script ``./install.sh`` provided or:
 Configuration
 -------------
 
-You can configure the extensions to be spell checked; the dictionary used and the regex used to find all words in the document in the plugins preferences.
-
-
+You can configure the extensions to be spell checked; the dictionary used and the reg-ex used to find all words in the document in the plug-ins preferences.
