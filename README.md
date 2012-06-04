@@ -20,3 +20,4 @@ Configuration
 -------------
 
 You can configure the extensions to be spell checked; the dictionary used and the reg-ex used to find all words in the document in the plug-ins preferences.
+

@@ -133,17 +133,11 @@ class SpellcheckOnSave(GObject.Object, Gedit.ViewActivatable,
     def on_populate_popup(self, view, menu):
         """add spelling suggestions to context menu"""
         # pylint: disable=W0613
-        #separator = Gtk.SeparatorMenuItem()
-        #separator.show()
-        #menu.prepend(separator)
         if self._mark_inside_word(self._mark_click):
             start, end = self._word_extents_from_mark(self._mark_click)
             if start.has_tag(self._spell_error_tag):
                 word = self._doc.get_text(start, end, False)
-                suggestions = Gtk.MenuItem(label='Suggestions')
-                suggestions.set_submenu(self._build_suggestion_menu(word))
-                suggestions.show()
-                menu.prepend(suggestions)
+                self._build_suggestion_menu(menu, word)
                 
     def _mark_inside_word(self, mark):
         """is the supplied mark, inside of a word?"""
@@ -164,23 +158,29 @@ class SpellcheckOnSave(GObject.Object, Gedit.ViewActivatable,
         """clone the iterator"""
         return self._doc.get_iter_at_offset(_iter.get_offset())
         
-    def _build_suggestion_menu(self, word):
+    def _build_suggestion_menu(self, menu, word):
         """build the suggestion submenu"""
-        menu = Gtk.Menu()
         suggestions = self._prefs.checker.suggest(word)
+        item = Gtk.MenuItem(label='--------------------------------------')
+        menu.append(item)
         if not suggestions:
-            item = Gtk.MenuItem()
-            label = Gtk.Label('')
-            label.set_markup('<i>No suggestions</i>')
-            item.add(label)
+            item = Gtk.MenuItem(label='No suggestions')
             menu.append(item)
         else:
             for suggestion in suggestions:
                 item = Gtk.MenuItem(label=suggestion)
                 item.connect('activate', self._replace_word, word, suggestion)
                 menu.append(item)
+            item = Gtk.MenuItem(label='--------------------------------------')
+            menu.append(item)
+            item = Gtk.MenuItem(label='Add "{0}" to dictionary'.format(word))
+            item.connect('activate', self._add_to_dictionary, word)
+            menu.append(item)
         menu.show_all()
         return menu
+    
+    def _add_to_dictionary(self, item, word):
+        self._prefs.checker.add_to_pwl(word)
         
     def _replace_word(self, item, oldword, newword):
         """suggestion submenu callback, replaces the selected word with the 
