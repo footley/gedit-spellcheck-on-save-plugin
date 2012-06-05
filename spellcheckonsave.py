@@ -169,29 +169,42 @@ class SpellcheckOnSave(GObject.Object, Gedit.ViewActivatable,
         else:
             for suggestion in suggestions:
                 item = Gtk.MenuItem(label=suggestion)
-                item.connect('activate', self._replace_word, word, suggestion)
+                item.connect('activate', self.on_replace_word, word, suggestion)
                 menu.append(item)
             item = Gtk.MenuItem(label='--------------------------------------')
             menu.append(item)
             item = Gtk.MenuItem(label='Add "{0}" to dictionary'.format(word))
-            item.connect('activate', self._add_to_dictionary, word)
+            item.connect('activate', self.on_add_to_dictionary, word)
             menu.append(item)
         menu.show_all()
         return menu
     
-    def _add_to_dictionary(self, item, word):
-        self._prefs.checker.add_to_pwl(word)
-        
-    def _replace_word(self, item, oldword, newword):
-        """suggestion submenu callback, replaces the selected word with the 
-        chosen suggestion"""
-        # pylint: disable=W0613
+    def _replace_word_at_mark(self, newword):
+        """
+        replace the word at the position last clicked with the newword provided
+        """
         start, end = self._word_extents_from_mark(self._mark_click)
         offset = start.get_offset()
         self._doc.begin_user_action()
         self._doc.delete(start, end)
         self._doc.insert(self._doc.get_iter_at_offset(offset), newword)
         self._doc.end_user_action()
+    
+    def on_add_to_dictionary(self, item, word):
+        """
+        Add the word to the user dictionary
+        """
+        # pylint: disable=W0613
+        self._replace_word_at_mark(word)
+        self._prefs.checker.add_to_pwl(word)
+        
+    def on_replace_word(self, item, oldword, newword):
+        """
+        suggestion submenu callback, replaces the selected word with the 
+        chosen suggestion
+        """
+        # pylint: disable=W0613
+        self._replace_word_at_mark(newword)
         self._prefs.checker.store_replacement(oldword, newword)
     
     def _get_unicode(self):
